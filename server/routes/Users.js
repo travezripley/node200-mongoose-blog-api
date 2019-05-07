@@ -1,92 +1,56 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/User"); //gets the folder - users Schema
+const User = require("../models/User"); //gets the folder - usersSchema
+const Blog = require("../models/blog"); //"gets the folder - blogSchema "
 
 // "Get all Users"
-router.get("/", (req, res, next) => {
+router.get("/", (req, res) => {
   User.find()
-    .exec()
     .then(users => {
-      console.log(users);
       res.status(200).json(users);
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({
-        error: err
-      });
-    });
+    .catch(err => res.status(404).send("No users found"));
 });
 
 // "Get Single User"
 router.get("/:id", (req, res) => {
-  const id = req.params.id;
-  User.findById(id)
+  User.findById(req.params.id)
     .then(user => {
-      console.log("user:", user);
-      if (user) {
-        res.status(200).json(user);
-      } else {
-        res.status(404).send("error: user not found");
-      }
+      if (!user) res.status(404).send();
+      res.status(200).json(user);
     })
-    .catch(err => {
-      res.status(500).json({
-        error: err
-      });
-    });
+    .catch(err => res.status(404).send("Houston, Weve got a problem"));
 });
 
 // "Create a User"
-router.post("/", (req, res, next) => {
-  const user = new User({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email
-  });
-
+router.post("/", (req, res) => {
+  const user = new User(req.body);
   user
     .save()
-    .then(result => {
-      console.log(result);
+    .then(user => {
+      res.status(201).json(user);
     })
-    .catch(err => console.log(err));
-  res.status(201).json({
-    message: "User was Created"
-  });
+    .catch(err => res.status(500).send("Ain't postin nothing here dawg"));
 });
 
 // "Update a User"
 router.put("/:id", (req, res) => {
-  const id = req.params.id;
-  User.findByIdAndUpdate(id, {
-    $set: {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email
-    }
-  })
-    .exec()
-    .then(result => {
-      console.log(result);
-      res.status(204).send(result);
+  User.findByIdAndUpdate(req.params.id, req.body)
+    .then(user => {
+      if (!user) res.status(404).send();
+      res.status(204).json(user);
     })
-    .catch(err => console.log(err));
+    .catch(err => res.status(500).send("Did not put"));
 });
 
 // "Delete a User"
-router.delete("/", (req, res) => {
-  const id = req.params.id;
-  User.findByIdAndRemove(id)
+router.delete("/:id", (req, res) => {
+  User.findByIdAndRemove(req.params.id)
     .then(user => {
+      if (!user) res.status(404).send();
       res.status(200).json(user);
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({
-        error: err
-      });
-    });
+    .catch(err => res.status(404).send("Still here - didn't delete"));
 });
 
 module.exports = router;
