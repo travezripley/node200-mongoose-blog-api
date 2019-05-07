@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User"); //gets the folder - usersSchema
-const Blog = require("../models/blog"); //"gets the folder - blogSchema "
+const Blog = require("../models/Blog"); //"gets the folder - blogSchema "
 
-// "Get all Users"
+// "Get all the Users"
 router.get("/", (req, res) => {
   User.find()
     .then(users => {

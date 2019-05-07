@@ -56,6 +56,8 @@ describe('/api/blogs', function () {
 
     it('POST / should save a new blog to the database when userId passed in body', (done) => {
         createUserInDB().then(user => {
+            console.log(user)
+            console.log(fakeBlogs[1])
             chai.request(app)
                 .post('/api/blogs')
                 .send(Object.assign({ author: user._id}, fakeBlogs[1]))
