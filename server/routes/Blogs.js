@@ -41,7 +41,8 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   let dbUser = null;
   
-  User.findById(req.body.author)
+  User
+  .findById(req.body.author)
     .then(user => {
       dbUser = user;
       const newBlog = new Blog(req.body);
