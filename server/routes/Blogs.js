@@ -6,30 +6,25 @@ const User = require("../models/User"); //"gets the folder - UserSchema "
 
 // "Get all Blogs"
 router.get("/", (req, res) => {
-    Blog
-    .find()
+  Blog.find()
     .then(Blogs => {
-        res.status(200).json(Blogs);
-      })
-      .catch(err => res.status(500).send("No Blogs found"));
-  });
-
+      res.status(200).json(Blogs);
+    })
+    .catch(err => res.status(500).send("No Blogs found"));
+});
 
 //"Get all featured Blogs"
 router.get("/featured", (req, res) => {
-  Blog
-    .where("featured", true)
+  Blog.where("featured", true)
     .then(blogs => {
       res.status(200).json(blogs);
     })
-    .catch(err => res.status(500).send("No FEATURED Blogs found"))
+    .catch(err => res.status(500).send("No FEATURED Blogs found"));
 });
-
 
 //"Get Single Blog"
 router.get("/:id", (req, res) => {
-  Blog
-    .findById(req.params.id)
+  Blog.findById(req.params.id)
     .then(blogs => {
       if (!blogs) res.status(404).send();
       res.status(200).json(blogs);
@@ -40,9 +35,7 @@ router.get("/:id", (req, res) => {
 //"Create a Blog + associate to userId"
 router.post("/", (req, res) => {
   let dbUser = null;
-  
-  User
-  .findById(req.body.author)
+  User.findById(req.body.author)
     .then(user => {
       dbUser = user;
       const newBlog = new Blog(req.body);
@@ -76,6 +69,5 @@ router.delete("/:id", (req, res) => {
     })
     .catch(err => res.status(404).send("Still here - didn't delete"));
 });
-
 
 module.exports = router;
