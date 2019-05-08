@@ -15,11 +15,12 @@ app.use(morgan("dev"));
 
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-  res.status(200).send();
-});
 
 app.use("/api/users", require("./routes/users"));
 app.use("/api/blogs", require("./routes/blogs"));
+
+app.get("/", (req, res) => {
+  res.status(200).send();
+});
 
 module.exports = app;
