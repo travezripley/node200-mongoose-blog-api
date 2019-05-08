@@ -4,9 +4,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-
-
-mongoose.connect('mongodb://localhost/my-blog', { useMongoClient: true });
+mongoose.connect(process.env.MONGODB_URI);
 mongoose.Promise = Promise;
 
 const app = express();
@@ -14,7 +12,6 @@ const app = express();
 app.use(morgan("dev"));
 
 app.use(bodyParser.json());
-
 
 app.use('/api/users', require('./routes/users'));
 app.use('/api/blogs', require('./routes/blogs'));
